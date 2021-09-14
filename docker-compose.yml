@@ -1,0 +1,53 @@
+version: 3
+services:
+  adservice:
+    container_name: "adservice-qc"
+    build: ./adservice/.
+    ports: 
+      - "9555:9555"
+  cartservice:
+    container_name: "cartservice-qc"
+    build: ./cartservice/.
+  checkoutservice:
+    container_name: "checkoutservice-qc"
+    build: ./checkoutservice/.
+    ports:
+      - "5050:5050"
+  currencyservice:
+    container_name: "currencyservice-qc"
+    build: ./currencyservice/.ports:
+      - "7000:7000"
+  emailservice:
+    container_name: "emailservice-qc"
+    build: ./emailservice/.
+    ports:
+      - "8080:8080"
+  frontend:
+    container_name: "frontend-qc"
+    build: ./frontend/.
+    ports:
+      - ":"
+  loadgenerator:
+    container_name: "loadgenerator-qc"
+    build: ./loadgenerator/.
+  paymentservice:
+    container_name: "paymentservice-qc"
+    build: ./paymentservice/.
+    ports:
+      - ":"
+  productcatalogservice:
+    container_name: "productcatalogservice-qc"
+    build: ./productcatalogservice/.
+  recommendationservice:
+    container_name: "recommendationservice-qc"
+    build: ./recommendationservice/.
+    ports:
+      - ":"
+  shippingservice:
+    container_name: "shippingservice-qc"
+    build: ./shippingservice/.
+    ports:
+      - "50051:50051"
+
+networks:
+  lorem_ipsum:
