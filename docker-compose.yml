@@ -1,10 +1,10 @@
-version: 3
+version: "3"
 services:
   redis:
     container_name: "redis-qc" 
     image: redis:alpine
     ports:
-      -"6379:6379"
+      - "6379:6379"
   adservice:
     container_name: "adservice-qc"
     build: ./adservice/.
@@ -16,7 +16,7 @@ services:
     container_name: "cartservice-qc"
     build: ./cartservice/src/.
     environment: 
-      - REDIS_ADDR='redis:6379'
+      - REDIS_ADDR=redis:6379
     ports:
       - "7070:7070"
     depends_on:
@@ -25,12 +25,12 @@ services:
     container_name: "checkoutservice-qc"
     build: ./checkoutservice/.
     environment: 
-      - PRODUCT_CATALOG_SERVICE_ADDR='productcatalogservice:3550' # autre écriture : "PRODUCT_CATALOG_SERVICE_ADDR:productcatalogservice:3550" mais /!\ au confusion s'il y a plusieurs ":" comme dans ce cas
-      - SHIPPING_SERVICE_ADDR='shippingservice:50051'
-      - CART_SERVICE_ADDR='cartservice:7070'
-      - CURRENCY_SERVICE_ADDR='currencyservice:7000'
-      - EMAIL_SERVICE_ADDR='emailservice:5000'
-      - PAYMENT_SERVICE_ADDR='paymentservice:50052'
+      - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550 # autre écriture : "PRODUCT_CATALOG_SERVICE_ADDR:productcatalogservice:3550" mais /!\ au confusion s'il y a plusieurs ":" comme dans ce cas
+      - SHIPPING_SERVICE_ADDR=shippingservice:50051
+      - CART_SERVICE_ADDR=cartservice:7070
+      - CURRENCY_SERVICE_ADDR=currencyservice:7000
+      - EMAIL_SERVICE_ADDR=emailservice:5000
+      - PAYMENT_SERVICE_ADDR=paymentservice:50052
     ports:
       - "5050:5050"
     depends_on:
@@ -58,13 +58,13 @@ services:
     container_name: "frontend-qc"
     build: ./frontend/.
     environment: 
-      - PRODUCT_CATALOG_SERVICE_ADDR='productcatalogservice:3550'
-      - SHIPPING_SERVICE_ADDR='shippingservice:50051'
-      - CART_SERVICE_ADDR='cartservice:7070'
-      - CURRENCY_SERVICE_ADDR='currencyservice:7000'
-      - CHECKOUT_SERVICE_ADDR='checkoutservice:5050'
-      - RECOMENDATION_SERVICE_ADDR='recommendationservice:8080'
-      - AD_SERVICE_ADDR='adservice:9555'
+      - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550
+      - SHIPPING_SERVICE_ADDR=shippingservice:50051
+      - CART_SERVICE_ADDR=cartservice:7070
+      - CURRENCY_SERVICE_ADDR=currencyservice:7000
+      - CHECKOUT_SERVICE_ADDR=checkoutservice:5050
+      - RECOMMENDATION_SERVICE_ADDR=recommendationservice:8080
+      - AD_SERVICE_ADDR=adservice:9555
       - PORT=8080
     ports:
       - "80:8080"
@@ -80,7 +80,7 @@ services:
     container_name: "loadgenerator-qc"
     build: ./loadgenerator/.
     environment: 
-      - FRONTEND_ADDR='frontend:80'
+      - FRONTEND_ADDR=frontend:80
     depends_on: 
       - frontend
   paymentservice:
@@ -102,7 +102,7 @@ services:
     build: ./recommendationservice/.
     environment: 
       - PORT=8080
-      - PRODUCT_CATALOG_SERVICE_ADDR='productcatalogservice:3550'
+      - PRODUCT_CATALOG_SERVICE_ADDR=productcatalogservice:3550
     ports:
       - "8080:8080"
     depends_on: 

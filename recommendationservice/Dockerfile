@@ -1,11 +1,25 @@
-FROM python:3.9-slim
+FROM python:3.7-slim
+RUN apt-get update -qqy && \
+	apt-get -qqy install wget g++ && \
+	rm -rf /var/lib/apt/lists/*
+# show python logs as they occur
+ENV PYTHONUNBUFFERED=0
 
-WORKDIR /app
+# download the grpc health probe
 
-COPY . .
 
+# get packages
+WORKDIR /recommendationservice
+COPY requirements.txt requirements.txt
+COPY requirements.in requirements.in
+RUN pip install -r requirements.in
 RUN pip install -r requirements.txt
 
+# add files into working directory
+COPY . .
+
+# set listen port
+ENV PORT "8080"
 EXPOSE 8080
 
-CMD ["python", "client.py","recommendation_server.py"]
+ENTRYPOINT ["python", "/recommendationservice/recommendation_server.py"]

@@ -9,9 +9,9 @@ RUN dotnet publish cartservice.csproj -p:PublishSingleFile=true -r linux-musl-x6
 FROM mcr.microsoft.com/dotnet/runtime-deps:5.0.4-alpine3.12-amd64
 
 #HealthCkeck app
-RUN GRPC_HEALTH_PROBE_VERSION=v0.3.6 && \
-    wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
-    chmod +x /bin/grpc_health_probe
+# RUN GRPC_HEALTH_PROBE_VERSION=v0.3.6 && \
+#     wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
+#     chmod +x /bin/grpc_health_probe
 WORKDIR /app
 COPY --from=builder /cartservice .
 ENV ASPNETCORE_URLS http://*:7070
