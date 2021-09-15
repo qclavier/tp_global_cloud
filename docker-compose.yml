@@ -1,60 +1,116 @@
 version: 3
 services:
+  redis:
+    container_name: "redis-qc" 
+    image: redis:alpine
+    ports:
+      -"6379:6379"
   adservice:
     container_name: "adservice-qc"
-    build: ./adservice/src/.
+    build: ./adservice/.
+    environment: 
+      - PORT=9555
     ports:
       - "9555:9555"
   cartservice:
     container_name: "cartservice-qc"
-    build: ./cartservice/.
+    build: ./cartservice/src/.
+    environment: 
+      - REDIS_ADDR='redis:6379'
+    ports:
+      - "7070:7070"
+    depends_on:
+      - redis
   checkoutservice:
     container_name: "checkoutservice-qc"
     build: ./checkoutservice/.
+    environment: 
+      - PRODUCT_CATALOG_SERVICE_ADDR='productcatalogservice:3550' # autre écriture : "PRODUCT_CATALOG_SERVICE_ADDR:productcatalogservice:3550" mais /!\ au confusion s'il y a plusieurs ":" comme dans ce cas
+      - SHIPPING_SERVICE_ADDR='shippingservice:50051'
+      - CART_SERVICE_ADDR='cartservice:7070'
+      - CURRENCY_SERVICE_ADDR='currencyservice:7000'
+      - EMAIL_SERVICE_ADDR='emailservice:5000'
+      - PAYMENT_SERVICE_ADDR='paymentservice:50052'
     ports:
       - "5050:5050"
+    depends_on:
+    - productcatalogservice
+    - shippingservice
+    - cartservice
+    - currencyservice
+    - emailservice
+    - paymentservice
   currencyservice:
     container_name: "currencyservice-qc"
-    build: ./currencyservice/.ports:
+    build: ./currencyservice/.
+    environment: 
+      - PORT=7000
+    ports:
       - "7000:7000"
   emailservice:
     container_name: "emailservice-qc"
     build: ./emailservice/.
+    environment: 
+      - PORT=8080
     ports:
-      - "8080:8080"
+      - "5000:8080"
   frontend:
     container_name: "frontend-qc"
     build: ./frontend/.
+    environment: 
+      - PRODUCT_CATALOG_SERVICE_ADDR='productcatalogservice:3550'
+      - SHIPPING_SERVICE_ADDR='shippingservice:50051'
+      - CART_SERVICE_ADDR='cartservice:7070'
+      - CURRENCY_SERVICE_ADDR='currencyservice:7000'
+      - CHECKOUT_SERVICE_ADDR='checkoutservice:5050'
+      - RECOMENDATION_SERVICE_ADDR='recommendationservice:8080'
+      - AD_SERVICE_ADDR='adservice:9555'
+      - PORT=8080
     ports:
-      - "8081:8080"
+      - "80:8080"
+    depends_on:
+    - productcatalogservice
+    - shippingservice
+    - cartservice
+    - currencyservice
+    - checkoutservice
+    - recommendationservice
+    - adservice
   loadgenerator:
     container_name: "loadgenerator-qc"
     build: ./loadgenerator/.
+    environment: 
+      - FRONTEND_ADDR='frontend:80'
+    depends_on: 
+      - frontend
   paymentservice:
     container_name: "paymentservice-qc"
     build: ./paymentservice/.
+    environment: 
+      - PORT=50051
     ports:
-      - ":" # Aucune idée de comment récupérer la variable port utilisée dans le code js
+      - "50052:50051"
   productcatalogservice:
     container_name: "productcatalogservice-qc"
     build: ./productcatalogservice/.
+    environment: 
+      - PORT=3550
     ports:
       - "3550:3550"
   recommendationservice:
     container_name: "recommendationservice-qc"
     build: ./recommendationservice/.
+    environment: 
+      - PORT=8080
+      - PRODUCT_CATALOG_SERVICE_ADDR='productcatalogservice:3550'
     ports:
-      - "8082:8080"
+      - "8080:8080"
+    depends_on: 
+      - productcatalogservice
   shippingservice:
     container_name: "shippingservice-qc"
     build: ./shippingservice/.
+    environment: 
+      - PORT=50051
     ports:
       - "50051:50051"
-
-networks:
-  cluster_ip:
-  cluster_ip:
-  cluster_ip:
-  cluster_ip:
-  cluster_ip:
-  node_port:

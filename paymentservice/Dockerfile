@@ -6,6 +6,6 @@ COPY . .
 
 RUN npm install 
 
-EXPOSE ?
+EXPOSE 50051
 
 CMD ["node", "client.js", "index.js", "server.js"]
