@@ -42,4 +42,4 @@ base de données nosql en mémoire redis.
 
 8- Configurer un cluster Kubernetes sur le cloud privé.
 
--- 9- Déployer l’application sur le cloud privé.
+9- Déployer l’application sur le cloud privé.
