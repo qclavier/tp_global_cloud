@@ -2,8 +2,8 @@ version: 3
 services:
   adservice:
     container_name: "adservice-qc"
-    build: ./adservice/.
-    ports: 
+    build: ./adservice/src/.
+    ports:
       - "9555:9555"
   cartservice:
     container_name: "cartservice-qc"
@@ -26,7 +26,7 @@ services:
     container_name: "frontend-qc"
     build: ./frontend/.
     ports:
-      - ":"
+      - "8081:8080"
   loadgenerator:
     container_name: "loadgenerator-qc"
     build: ./loadgenerator/.
@@ -34,15 +34,17 @@ services:
     container_name: "paymentservice-qc"
     build: ./paymentservice/.
     ports:
-      - ":"
+      - ":" # Aucune idée de comment récupérer la variable port utilisée dans le code js
   productcatalogservice:
     container_name: "productcatalogservice-qc"
     build: ./productcatalogservice/.
+    ports:
+      - "3550:3550"
   recommendationservice:
     container_name: "recommendationservice-qc"
     build: ./recommendationservice/.
     ports:
-      - ":"
+      - "8082:8080"
   shippingservice:
     container_name: "shippingservice-qc"
     build: ./shippingservice/.
@@ -50,4 +52,9 @@ services:
       - "50051:50051"
 
 networks:
-  lorem_ipsum:
+  cluster_ip:
+  cluster_ip:
+  cluster_ip:
+  cluster_ip:
+  cluster_ip:
+  node_port:
